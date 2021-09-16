@@ -15,6 +15,7 @@ namespace Bunit
 	public class BunitJSInterop
 	{
 		private readonly Dictionary<Type, List<object>> handlers = new();
+		private JSRuntimeInvocationHandler? genericHandler;
 		private JSRuntimeMode mode;
 
 		/// <summary>
@@ -65,11 +66,34 @@ namespace Bunit
 			handlers[resultType].Add(handler);
 		}
 
+
+		/// <summary>
+		/// Adds a generic invocation handler to bUnit's JSInterop.
+		/// The purpose of this untyped invocation handler is handle all js invocations.
+		/// </summary>
+		public void SetGenericInvocationHandler(JSRuntimeInvocationHandler? handler)
+		{
+			genericHandler = handler;
+		}
+
 		internal ValueTask<TValue> HandleInvocation<TValue>(JSRuntimeInvocation invocation)
 		{
 			RegisterInvocation(invocation);
-			return TryHandlePlannedInvocation<TValue>(invocation)
+			return TryGenericInvocation<TValue>(invocation)
+				?? TryHandlePlannedInvocation<TValue>(invocation)
 				?? new ValueTask<TValue>(default(TValue)!);
+		}
+
+		private ValueTask<TValue>? TryGenericInvocation<TValue>(JSRuntimeInvocation invocation)
+		{
+			ValueTask<TValue>? result = default;
+
+			if (genericHandler != null && genericHandler.HandleAsync(invocation) is Task<object> res)
+			{
+				result = new ValueTask<TValue>(res.ContinueWith(r => (TValue) r.Result, System.Threading.CancellationToken.None, TaskContinuationOptions.NotOnCanceled, TaskScheduler.Default));
+			}
+			
+			return result;
 		}
 
 		private ValueTask<TValue>? TryHandlePlannedInvocation<TValue>(JSRuntimeInvocation invocation)

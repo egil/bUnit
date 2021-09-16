@@ -511,5 +511,65 @@ namespace Bunit.JSInterop
 			exception.Invocation.Identifier.ShouldBe(identifier);
 			exception.Invocation.Arguments.ShouldBe(args);
 		}
+
+		[Fact(DisplayName = "Untyped setup can return a typed result from a factory function")]
+		public async Task Test059()
+		{
+			var sut = CreateSut(JSRuntimeMode.Strict);
+			var identifier = "func";
+
+			var jsRuntime = sut.JSRuntime;
+
+			var handler = sut.Setup(i => i.Identifier == identifier);
+			handler.SetResult(_ => false);
+
+			var i1 = await jsRuntime.InvokeAsync<bool>(identifier);
+			i1.ShouldBe(false);
+		}
+
+		[Fact(DisplayName = "Untyped setup can throw an exception from a factory function")]
+		public void Test060()
+		{
+			var sut = CreateSut(JSRuntimeMode.Strict);
+			var identifier = "func";
+
+			var jsRuntime = sut.JSRuntime;
+
+			var handler = sut.Setup(i => i.Identifier == identifier);
+			handler.SetException<bool, NotImplementedException>(_ => throw new NotImplementedException());
+
+			Should.Throw<NotImplementedException>(async () => await jsRuntime.InvokeAsync<bool>(identifier));
+		}
+
+		[Fact(DisplayName = "An untyped invocation handler can be canceled")]
+		public void Test061()
+		{
+			var sut = CreateSut(JSRuntimeMode.Strict);
+			var identifier = "func";
+
+			var jsRuntime = sut.JSRuntime;
+
+			var handler = sut.Setup(i => i.Identifier == identifier);
+			handler.SetCanceled();
+
+			var res = jsRuntime.InvokeAsync<bool>(identifier);
+			res.IsCanceled.ShouldBeTrue();
+		}
+
+		[Fact(DisplayName = "Untyped supports setting result after invocation")]
+		public async Task Test062()
+		{
+			var sut = CreateSut(JSRuntimeMode.Strict);
+			var identifier = "func";
+			var jsRuntime = sut.JSRuntime;
+
+			var handler = sut.Setup(i => i.Identifier == identifier);
+
+			var i1 = jsRuntime.InvokeAsync<bool>(identifier);
+
+			handler.SetResult(_ => false);
+
+			(await i1).ShouldBe(false);
+		}
 	}
 }

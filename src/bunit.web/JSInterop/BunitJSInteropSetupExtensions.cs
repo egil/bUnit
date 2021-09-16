@@ -67,6 +67,40 @@ namespace Bunit
 			=> Setup<TResult>(jsInterop, _ => true, isCatchAllHandler: true);
 
 		/// <summary>
+		/// Configure an untyped JSInterop invocation handler passing the <paramref name="invocationMatcher"/> test.
+		/// </summary>
+		/// <param name="jsInterop">The bUnit JSInterop to setup the invocation handling with.</param>
+		/// <param name="invocationMatcher">A matcher that is passed an <see cref="JSRuntimeInvocation"/>. If it returns true the invocation is matched.</param>
+		/// <returns>A <see cref="UntypedJSRuntimeInvocationHandler"/>.</returns>
+		public static UntypedJSRuntimeInvocationHandler Setup(this BunitJSInterop jsInterop, InvocationMatcher invocationMatcher)
+		{
+			if (jsInterop is null)
+				throw new ArgumentNullException(nameof(jsInterop));
+			return new UntypedJSRuntimeInvocationHandler(jsInterop, invocationMatcher);
+		}
+
+		/// <summary>
+		/// Configure an untyped JSInterop invocation handler with the <paramref name="identifier"/> and arguments
+		/// passing the <paramref name="invocationMatcher"/> test.
+		/// </summary>
+		/// <param name="jsInterop">The bUnit JSInterop to setup the invocation handling with.</param>
+		/// <param name="identifier">The identifier to setup a response for.</param>
+		/// <param name="invocationMatcher">A matcher that is passed an <see cref="JSRuntimeInvocation"/> associated with  the<paramref name="identifier"/>. If it returns true the invocation is matched.</param>
+		/// <returns>A <see cref="UntypedJSRuntimeInvocationHandler"/>.</returns>
+		public static UntypedJSRuntimeInvocationHandler Setup(this BunitJSInterop jsInterop, string identifier, InvocationMatcher invocationMatcher)
+			=> Setup(jsInterop, inv => identifier.Equals(inv.Identifier, StringComparison.Ordinal) && invocationMatcher(inv));
+
+		/// <summary>
+		/// Configure an untyped JSInterop invocation handler with the <paramref name="identifier"/> and <paramref name="arguments"/>.
+		/// </summary>
+		/// <param name="jsInterop">The bUnit JSInterop to setup the invocation handling with.</param>
+		/// <param name="identifier">The identifier to setup a response for.</param>
+		/// <param name="arguments">The arguments that an invocation to <paramref name="identifier"/> should match.</param>
+		/// <returns>A <see cref="UntypedJSRuntimeInvocationHandler"/>.</returns>
+		public static UntypedJSRuntimeInvocationHandler Setup(this BunitJSInterop jsInterop, string identifier, params object?[]? arguments)
+			=> Setup(jsInterop, identifier, invocation => invocation.Arguments.SequenceEqual(arguments ?? Array.Empty<object?>()));
+
+		/// <summary>
 		/// Configure a JSInterop invocation handler for an <c>InvokeVoidAsync</c> call with arguments
 		/// passing the <paramref name="invocationMatcher"/> test, that should not receive any result.
 		/// </summary>
