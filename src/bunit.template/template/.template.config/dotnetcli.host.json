@@ -17,6 +17,7 @@
 		"--framework xunit --sdk net8.0",
 		"--framework xunitv3 --sdk net8.0",
 		"--framework nunit --sdk net8.0",
-		"--framework mstest --sdk net8.0"
+		"--framework mstest --sdk net8.0",
+		"--framework tunit --sdk net8.0"
 	]
 }

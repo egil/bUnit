@@ -41,4 +41,8 @@
 	  <None Remove="template\CounterRazorTests.razor" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="temp\" />
+	</ItemGroup>
+
 </Project>

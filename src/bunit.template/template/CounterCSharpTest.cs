@@ -1,3 +1,7 @@
+#if (testFramework_tunit)
+using TUnit;
+#endif
+
 namespace Company.BlazorTests1;
 
 /// <summary>
@@ -13,6 +17,9 @@ public class CounterCSharpTest : BunitContext
 public class CounterCSharpTest : BunitContext
 #elif (testFramework_mstest)
 [TestClass]
+public class CounterCSharpTest : BunitContext
+#elif (testFramework_tunit)
+[Test]
 public class CounterCSharpTest : BunitContext
 #endif
 {
