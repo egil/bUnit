@@ -12,7 +12,7 @@
 - Pass parameters, cascading values and inject services into components under test
 - Mock `IJSRuntime`, Blazor authentication and authorization, and others
 
-bUnit builds on top of existing unit testing frameworks such as xUnit, NUnit, and MSTest, which run the Blazor component tests in just the same way as any normal unit test. bUnit runs a test in milliseconds, compared to browser-based UI tests which usually take seconds to run.
+bUnit builds on top of existing unit testing frameworks such as xUnit, NUnit, MSTest and TUnit, which run the Blazor component tests in just the same way as any normal unit test. bUnit runs a test in milliseconds, compared to browser-based UI tests which usually take seconds to run.
 
 **Go to [bUnit.dev](https://bunit.dev) to learn more.**
 
