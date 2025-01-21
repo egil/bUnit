@@ -1,5 +1,5 @@
 #if (testFramework_tunit)
-using TUnit;
+using TUnit.Core;
 #endif
 
 namespace Company.BlazorTests1;
