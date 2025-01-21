@@ -1,9 +1,14 @@
+<!--#if (testFramework_tunit) -->
+<Project Sdk="Microsoft.NET.Sdk">
+<!--#else -->
 <Project Sdk="Microsoft.NET.Sdk.Razor">
-
+<!--#endif -->
 	<PropertyGroup>
 		<TargetFramework>targetSdk</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
+		<OutputType Condition="'$(testFramework_tunit)' == 'true'">Exe</OutputType>
+		<IsTestingPlatformApplication Condition="'$(testFramework_tunit)' == 'true'">false</IsTestingPlatformApplication>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -18,8 +23,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-		<PackageReference Include="coverlet.collector" Version="6.0.3">
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" Condition="'$(testFramework_tunit)' != 'true'"/>
+		<PackageReference Include="coverlet.collector" Version="6.0.3" Condition="'$(testFramework_tunit)' != 'true'">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -49,6 +54,10 @@
 	<ItemGroup Condition="'$(testFramework_mstest)' == 'true'">
 		<PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
 		<PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(testFramework_tunit)' == 'true'">
+		<PackageReference Include="TUnit" Version="0.6.154" />
 	</ItemGroup>
 
 </Project>

@@ -206,6 +206,14 @@ jobs:
           dotnet restore ${{ github.workspace }}/TemplateTestMstest --source https://api.nuget.org/v3/index.json --source ${{ env.NUGET_DIRECTORY }}
           dotnet test ${{ github.workspace }}/TemplateTestMstest
 
+      - name: ✔ Verify TUnit template
+        run: |
+            dotnet new bunit --framework tunit --no-restore -o ${{ github.workspace }}/TemplateTestTUnit
+            echo '<?xml version="1.0" encoding="utf-8"?><Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"></Project>' >> ${{ github.workspace }}/TemplateTestTUnit/Directory.Build.props
+            echo '<Project><PropertyGroup><ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally></PropertyGroup></Project>' >> ${{ github.workspace }}/TemplateTestTUnit/Directory.Packages.props
+            dotnet restore ${{ github.workspace }}/TemplateTestTUnit --source https://api.nuget.org/v3/index.json --source ${{ env.NUGET_DIRECTORY }}
+            dotnet test ${{ github.workspace }}/TemplateTestTUnit
+
   validate-docs:
     runs-on: ubuntu-latest
     steps:

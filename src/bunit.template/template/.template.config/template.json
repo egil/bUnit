@@ -23,8 +23,8 @@
 		{
 			"modifiers": [
 				{
-					"exclude": [ "BunitTestContext.cs" ],
-					"condition": "(testFramework_xunit || testFramework_xunitv3)"
+					"exclude": [ "_Imports.razor", "CounterRazorTests.razor" ],
+					"condition": "(testFramework_tunit)"
 				}
 			]
 		}
@@ -67,6 +67,11 @@
 					"choice": "mstest",
 					"description": "MSTest unit testing framework",
 					"displayName": "MSTest"
+				},
+				{
+					"choice": "tunit",
+					"description": "TUnit unit testing framework",
+					"displayName": "TUnit"
 				}
 			]
 		},
@@ -85,6 +90,10 @@
 		"testFramework_mstest": {
 			"type": "computed",
 			"value": "UnitTestFramework == \"mstest\""
+		},
+		"testFramework_tunit": {
+			"type": "computed",
+			"value": "UnitTestFramework == \"tunit\""
 		},
 		"targetSdk": {
 			"type": "parameter",
