@@ -8,7 +8,6 @@
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<OutputType Condition="'$(testFramework_tunit)' == 'true'">Exe</OutputType>
-		<IsTestingPlatformApplication Condition="'$(testFramework_tunit)' == 'true'">false</IsTestingPlatformApplication>
 	</PropertyGroup>
 
 	<ItemGroup>
