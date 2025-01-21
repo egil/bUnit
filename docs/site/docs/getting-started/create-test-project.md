@@ -62,6 +62,12 @@ dotnet new bunit --framework nunit -o <NAME OF TEST PROJECT>
 dotnet new bunit --framework mstest -o <NAME OF TEST PROJECT>
 ```
 
+# [TUnit](#tab/tunit)
+
+```dotnetcli
+dotnet new bunit --framework tunit -o <NAME OF TEST PROJECT>
+```
+
 ***
 
 The `--framework` option in the `dotnet new` command above is used to specify the unit testing framework used by the test project. If the `--framework` option is omitted, the default test framework `xunit` will be configured. Currently supported options are the following:
@@ -119,6 +125,12 @@ dotnet new nunit -o <NAME OF TEST PROJECT>
 
 ```dotnetcli
 dotnet new mstest -o <NAME OF TEST PROJECT>
+```
+
+# [TUnit](#tab/tunit)
+
+```dotnetcli
+dotnet new TUnit -o <NAME OF TEST PROJECT>
 ```
 
 ***
