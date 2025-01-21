@@ -26,12 +26,6 @@ These steps look like this from the `dotnet` CLI:
 Install the template from NuGet using this command:
 
 ```dotnetcli
-dotnet new --install bunit.template
-```
-
-Or, since .NET 7 onwards:
-
-```dotnetcli
 dotnet new install bunit.template
 ```
 
@@ -49,11 +43,18 @@ the framework of your choice:
 dotnet new bunit --framework xunit -o <NAME OF TEST PROJECT>
 ```
 
+# [xUnit v3](#tab/xunitv3)
+
+```dotnetcli
+dotnet new bunit --framework xunitv3 -o <NAME OF TEST PROJECT>
+```
+
 # [NUnit](#tab/nunit)
 
 ```dotnetcli
 dotnet new bunit --framework nunit -o <NAME OF TEST PROJECT>
 ```
+
 
 # [MSTest](#tab/mstest)
 
@@ -65,9 +66,10 @@ dotnet new bunit --framework mstest -o <NAME OF TEST PROJECT>
 
 The `--framework` option in the `dotnet new` command above is used to specify the unit testing framework used by the test project. If the `--framework` option is omitted, the default test framework `xunit` will be configured. Currently supported options are the following:
 
-- `xunit` - [xUnit](https://xunit.net/),
+- `xunit` and `xunitv3` - [xUnit](https://xunit.net/),
 - `nunit` - [NUnit](https://nunit.org/),
 - `mstest` - [MSTest](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest)
+- `tunit` - [TUnit](https://github.com/thomhurst/TUnit)
 
 **3. Add the test project to your solution**
 
@@ -84,7 +86,7 @@ This will allow the test project to see and test the components in the component
 
 This section will take you through the steps required to create a project for testing Blazor components using bUnit. Any of the three general-purpose test frameworks shown in step 1 below can be used. Briefly, here is what we will do:
 
-1. Create a new xUnit/NUnit/MSTest testing project
+1. Create a new xUnit/NUnit/MSTest/TUnit testing project
 2. Add bUnit to the test project
 3. Configure project settings
 4. Add the test project to your existing solution
@@ -99,6 +101,12 @@ Use the following command (_click on the tab for the test framework of choice_):
 
 ```dotnetcli
 dotnet new xunit -o <NAME OF TEST PROJECT>
+```
+
+# [xUnit v3](#tab/xunitv3)
+
+```dotnetcli
+dotnet new xunit3 -o <NAME OF TEST PROJECT>
 ```
 
 # [NUnit](#tab/nunit)
@@ -130,11 +138,11 @@ dotnet add package bunit --version #{NBGV_NuGetPackageVersion}#
 
 The test projects setting needs to be set to the following:
 
-- the project's SDK needs to be set to `Microsoft.NET.Sdk.Razor`
+- the project's SDK needs to be set to `Microsoft.NET.Sdk.Razor` (this does not work with **TUnit** - a more detailed explanation can be found below)
 - set the `<TargetFramework>` to `net8.0`
 
 > [!NOTE]
-> bUnit works with `net7.0`, `net6.0`, `net5.0` and `netcoreapp3.1`/`netstandard2.1` test projects as well.
+> bUnit works with `net8.0` and above as well.
 
 To do so, change the first part of the test projects `.csproj` file to look like this.:
 
@@ -172,13 +180,43 @@ The result should be a test project with a `.csproj` that looks like this (non b
 
   <ItemGroup>
     <PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-		<PackageReference Include="xunit" Version="2.8.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="xunit" Version="2.9.4" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="<PATH TO COMPONENT LIB>.csproj" />
+  </ItemGroup>
+
+</Project>
+```
+
+# [xUnit v3](#tab/xunitv3)
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="xunit.v3" Version="1.0.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -201,10 +239,10 @@ The result should be a test project with a `.csproj` that looks like this (non b
 
   <ItemGroup>
     <PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -227,10 +265,10 @@ The result should be a test project with a `.csproj` that looks like this (non b
 
   <ItemGroup>
     <PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.7.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.7.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -239,6 +277,36 @@ The result should be a test project with a `.csproj` that looks like this (non b
 
 </Project>
 ```
+
+# [TUnit](#tab/tunit)
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="bunit" Version="#{RELEASE_VERSION}#" />
+    <PackageReference Include="TUnit" Version="0.6.154" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="<PATH TO COMPONENT LIB>.csproj" />
+  </ItemGroup>
+
+</Project>
+```
+
+> [!WARNING]
+> **TUnit** and the `Microsoft.NET.Sdk.Razor` both utilize source code generators. Source generators can not see or interact with the output of another generator. Therefore **TUnit** does not work with `razor` files. Using `cs` based tests is working perfectly fine. For more information regarding the setup of **TUnit** head over to: https://github.com/thomhurst/TUnit
+
+***
 
 ## Further reading
 
