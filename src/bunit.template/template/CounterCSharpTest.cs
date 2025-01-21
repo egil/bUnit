@@ -18,6 +18,8 @@ public class CounterCSharpTest : BunitContext
 #elif (testFramework_mstest)
 [TestClass]
 public class CounterCSharpTest : BunitContext
+#elif (testFramework_tunit)
+public class CounterCSharpTest : BunitContext
 #endif
 {
 #if (testFramework_xunit)
@@ -33,13 +35,13 @@ public class CounterCSharpTest : BunitContext
 #endif
 
 	public void CounterStartsAtZero()
-{
-    // Arrange
-    var cut = Render<Counter>();
+    {
+        // Arrange
+        var cut = Render<Counter>();
 
-    // Assert that content of the paragraph shows counter at zero
-    cut.Find("p").MarkupMatches("<p>Current count: 0</p>");
-}
+        // Assert that content of the paragraph shows counter at zero
+        cut.Find("p").MarkupMatches("<p>Current count: 0</p>");
+    }
 
 #if (testFramework_xunit)
 	[Fact]
@@ -49,16 +51,18 @@ public class CounterCSharpTest : BunitContext
 	[Test]
 #elif (testFramework_mstest)
 	[TestMethod]
+#elif (testFramework_tunit)
+    [Test]
 #endif
-public void ClickingButtonIncrementsCounter()
-{
-    // Arrange
-    var cut = Render<Counter>();
+    public void ClickingButtonIncrementsCounter()
+    {
+        // Arrange
+        var cut = Render<Counter>();
 
-    // Act - click button to increment counter
-    cut.Find("button").Click();
+        // Act - click button to increment counter
+        cut.Find("button").Click();
 
-    // Assert that the counter was incremented
-    cut.Find("p").MarkupMatches("<p>Current count: 1</p>");
-}
+        // Assert that the counter was incremented
+        cut.Find("p").MarkupMatches("<p>Current count: 1</p>");
+    }
 }
