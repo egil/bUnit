@@ -18,9 +18,6 @@ public class CounterCSharpTest : BunitContext
 #elif (testFramework_mstest)
 [TestClass]
 public class CounterCSharpTest : BunitContext
-#elif (testFramework_tunit)
-[Test]
-public class CounterCSharpTest : BunitContext
 #endif
 {
 #if (testFramework_xunit)
@@ -31,7 +28,10 @@ public class CounterCSharpTest : BunitContext
 	[Test]
 #elif (testFramework_mstest)
 	[TestMethod]
+#elif (testFramework_tunit)
+    [Test]
 #endif
+
 	public void CounterStartsAtZero()
 {
     // Arrange
