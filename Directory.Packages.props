@@ -122,7 +122,7 @@
 		<PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.0" />
 		<PackageVersion Include="Shouldly" Version="4.2.1"/>
 		<PackageVersion Include="Verify.SourceGenerators" Version="2.5.0"/>
-		<PackageVersion Include="Verify.Xunit" Version="28.9.0"/>
+		<PackageVersion Include="Verify.Xunit" Version="28.10.1"/>
 		<PackageVersion Include="Xunit.Combinatorial" Version="1.6.24"/>
 		<PackageVersion Include="coverlet.collector" Version="6.0.3" />
 		<PackageVersion Include="coverlet.msbuild" Version="6.0.3" />
@@ -135,7 +135,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Test Dependencies - Legacy" Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0'">
-		<PackageVersion Update="xunit.runner.visualstudio" Version="2.4.5"/>
+		<PackageVersion Update="xunit.runner.visualstudio" Version="3.0.1"/>
 	</ItemGroup>
 
 	<ItemGroup Label="Source Code Generators">
